@@ -11,6 +11,5 @@ import org.springframework.stereotype.Repository;
 // ID : 엔티티의 기본 키의 타입
 @Repository
 public interface TodoRepository extends JpaRepository<TodoEntity, String> {
-    @Query(value = "SELECT * FROM Todo t where t.userId = ?1",nativeQuery = true)
     List<TodoEntity> findByUserId(String id);
 }
