@@ -59,13 +59,13 @@ public class TestController {
         return response;
     }
 
-    // ResponseEntity는 HTTP 응답의 Body뿐만 아니라 여러 다른 매개변수들(status, Header) 를 조작하고 싶을 때 사용
+    // ResponseEntity 는 HTTP 응답의 Body 뿐만 아니라 여러 다른 매개변수들(status, Header) 를 조작하고 싶을 때 사용
     @GetMapping("/testResponseEntity")
-    public ResponseEntity<?> testControllerResponseEntity(){
+    public ResponseEntity<?> testControllerResponseEntity() {
         List<String> list = new ArrayList<>();
         list.add("ResponseEntity, 400");
         ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
-        // http status를 400으로 설정
+        // http status 를 400으로 설정
         return ResponseEntity.badRequest().body(response);
     }
 }

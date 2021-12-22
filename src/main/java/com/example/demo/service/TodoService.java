@@ -13,10 +13,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class TodoService {
+
     @Autowired
     private TodoRepository repository;
 
-    public String testService(){
+    public String testService() {
         // TodoEntity 생성
         TodoEntity entity = TodoEntity.builder().title("My first todo item").build();
         // TodoEntity 저장
@@ -26,52 +27,52 @@ public class TodoService {
         return savedEntity.getTitle();
     }
 
-    public List<TodoEntity> create(final TodoEntity entity){
+    public List<TodoEntity> create(final TodoEntity entity) {
         // Validations
         validate(entity);
 
         repository.save(entity);
-        log.info("Entity id : {} is saved",entity.getId());
+        log.info("Entity id : {} is saved", entity.getId());
 
         return repository.findByUserId(entity.getUserId());
     }
 
-    public List<TodoEntity> retrieve(final String userId){
+    public List<TodoEntity> retrieve(final String userId) {
         return repository.findByUserId(userId);
     }
 
-    public List<TodoEntity> update(final TodoEntity entity){
+    public List<TodoEntity> update(final TodoEntity entity) {
         validate(entity);
         final Optional<TodoEntity> original = repository.findById(entity.getId());
         original.ifPresent(todo -> {
             todo.setTitle(entity.getTitle());
             todo.setDone(entity.isDone());
             repository.save(todo);
-            });
+        });
 
         return retrieve(entity.getUserId());
     }
 
-    public List<TodoEntity> delete(final TodoEntity entity){
+    public List<TodoEntity> delete(final TodoEntity entity) {
         validate(entity);
 
-        try{
+        try {
             repository.delete(entity);
-        } catch (Exception e){
-            log.error("error deleting entity ",entity.getId(),e);
+        } catch (Exception e) {
+            log.error("error deleting entity ", entity.getId(), e);
             throw new RuntimeException("error deleting entity " + entity.getId());
         }
 
         return retrieve(entity.getUserId());
     }
 
-    private void validate(final TodoEntity entity){
-        if(entity == null){
+    private void validate(final TodoEntity entity) {
+        if (entity == null) {
             log.warn("Entity cannot be null");
             throw new RuntimeException("Entity cannot be null");
         }
 
-        if(entity.getUserId() == null){
+        if (entity.getUserId() == null) {
             log.warn("Unknown user");
             throw new RuntimeException("Unknown user");
         }
